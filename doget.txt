@@ -1,0 +1,45 @@
+protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		HttpSession session = req.getSession();
+		String[] itemSelected;
+		itemSelected = req.getParameterValues("item");//{"0", "1", "2"}
+		String itemName;
+		//Integer itemCount = (Integer)session.getValue("itemCount");
+		Integer itemCount = (Integer)session.getAttribute("itemCount");
+		
+		
+		if (itemCount == null)
+			itemCount = 0;
+		if (itemSelected != null) {
+			for(int i = 0; i < itemSelected.length; i++) {
+				itemName  = itemSelected[i]; //"0"
+				itemCount = itemCount + 1;
+				//session.putValue("itemCount", itemCount);
+				session.setAttribute("itemCount", itemCount);
+				session.setAttribute("Item" + itemCount, itemName);
+				
+			}
+			//response.getWriter().write(itemCount.toString());
+			String item = (String)session.getAttribute("Item1");
+			//response.getWriter().write(item);
+			PrintWriter out = response.getWriter();
+			out.println("<html>");
+			out.println("<head>");
+			out.println("</head>");
+			out.println("<body>");
+			out.println("<table border='3px'>");
+			for(int i = 1; i <= itemCount; i++) {
+				out.println("<tr>");
+					out.println("<td>");
+					out.println("Item" + i);
+					out.println("</td>");
+					out.println("<td>");
+					 out.println((String)session.getAttribute("Item" + i));
+					out.println("</td>");
+				out.println("</tr>");
+			}
+			out.println("</table>");
+			out.println("</body>");
+			out.println("</html>");
+			
+		}
